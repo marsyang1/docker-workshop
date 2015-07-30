@@ -1,20 +1,26 @@
-行前準備：申請帳號、安裝軟體
+行前準備 Part 1：申請帳號、安裝軟體
 ===
 
 本課程含大量「實機操作」內容，需請您自備筆記型電腦。請先在您的電腦上，依照以下指示，完成行前準備：
 
-1. 安裝軟體
+1. 安裝軟體<br/>
+   1.1：安裝步驟<br/>
+   1.2：Windows 作業系統注意事項<br/>
+   1.3：磁碟空間
 2. 註冊 GitHub 帳號
 3. 註冊 Docker Hub 帳號
 4. 列印參考資料
-5. 預載範例程式碼
+
+
+[ Next: --> [行前準備 Part 2](config.md) ]
+
 
 
 ## 1. 安裝軟體
 
-本課程的「實機操作」部分，需要學員自備筆記型電腦。而這些筆電的作業系統，可能是 Windows，也可能是 Mac OS X，或各種 Linux distributions。
+本課程的「實機操作」部分，需要學員自備 **64 位元**的筆記型電腦。而這些筆電的作業系統，可能是 Windows，也可能是 Mac OS X，或各種 Linux distributions。
 
-為了讓課程有個一致的實作環境，減少干擾施教者與學習者的環境變因，我們統一使用 [Vagrant](http://www.vagrantup.com/) + [VirtualBox](https://www.virtualbox.org/) 虛擬機器組合，作為課堂實作的統一環境。詳細的解說，請見本文附錄：【關於 Vagrant】。這裡先只講軟體安裝步驟。
+為了讓課程有個一致的實作環境，減少干擾施教者與學習者的環境變因，我們統一使用 [Vagrant](http://www.vagrantup.com/) + [VirtualBox](https://www.virtualbox.org/) 虛擬機器組合，作為課堂實作的統一環境。對這種軟體組合的技術細節感興趣的，請見本文附錄：【關於 Vagrant】。這裡先只講軟體安裝步驟。
 
 
 ### 1.1：安裝步驟
@@ -30,35 +36,50 @@
 
    並依序執行之。
 
-   ![下載必要的 VirtualBox 安裝檔案](download-virtualbox.png)
+   ![下載必要的 VirtualBox 安裝檔案](img/download-virtualbox.png)
 
 
 ### 1.2：Windows 作業系統注意事項
 
-在 Windows 上安裝 VirtualBox 時，如果遇到以下錯誤：
+在 Windows 上，下載 VirtualBox 兩個安裝檔時，最好先置於「完全由**英文字**或**阿拉伯數字**所組成的路徑」上，再執行安裝程序，比較不會出現奇奇怪怪的亂碼問題。
 
-   ![找不到指定的檔案](vbox-win64-error.png)
+- 安裝 VirtualBox 時，如果遇到以下錯誤：
 
-請先切換到放置下載檔案的目錄，找出剛剛下載回來的安裝檔名（以我的例子：`VirtualBox-4.3.14-95030-Win.exe`），再依序執行以下命令：
+  ![找不到指定的檔案](img/vbox-win64-error.png)
 
-   ```bat
-   $ VirtualBox-4.3.14-95030-Win  -extract
-   $ cd VirtualBox
-   $ dir
-   ```
+  請先切換到放置下載檔案的目錄，找出剛剛下載回來的安裝檔名（以我的例子：`VirtualBox-4.3.22-98236-Win.exe`），再依序執行以下命令：
 
-你應該會看到一個 `msi` 類型的安裝檔，請執行它。
+  ```bat
+  VirtualBox-4.3.22-98236-Win  -extract
+  cd VirtualBox
+  dir
+  ```
 
-最後，為了運作順暢，你還需要一個「**純命令列**的 ssh 程式」。如果你堅持要用 [PuTTY](http://www.chiark.greenend.org.uk/~sgtatham/putty/)、[PieTTY](http://ntu.csie.org/~piaip/pietty/) 或[可攜版](http://jedi.org/PieTTYPortable/)，可能會在某些進階步驟踩到地雷，建議你安裝一個「**純命令列**的 ssh 程式」吧。以下是一些輕量級的 `ssh.exe` 選項：
+  你應該會看到一個 `msi` 類型的安裝檔，請執行它。
 
-  - [OpenSSH for Windows](http://sourceforge.net/projects/opensshwindows/)
-  - [Git for the Windows platform](http://git-scm.com/download/win) 裡面含有一枚 `ssh.exe`
+- 安裝 VirtualBox Extension Pack 時，如果遇到 “The installer failed with exit code: 1” 錯誤，請先切換到放置下載檔案的目錄，找出剛剛下載回來的安裝檔名（以我的例子：`Oracle_VM_VirtualBox_Extension_Pack-4.3.22-98236.vbox-extpack`），再依序執行以下命令：
 
-安裝後，記得要去【控制台】把 `ssh.exe` 路徑加到 `PATH` 環境變數。
+  ```bat
+  VBoxManage extpack uninstall "Oracle VM VirtualBox Extension Pack"
+  VBoxManage extpack cleanup
+  VBoxManage extpack install --replace  Oracle_VM_VirtualBox_Extension_Pack-4.3.22-98236.vbox-extpack
+  ```
 
-或者，乾脆安裝整套 [MinGW](http://www.mingw.org/) 或 [Cygwin](https://www.cygwin.com/) 算了⋯⋯
 
 
+最後，為了 Vagrant 運作順暢，你還需要一個「**純命令列**的 ssh 程式」（像 [PuTTY](http://www.chiark.greenend.org.uk/~sgtatham/putty/)、[PieTTY](http://ntu.csie.org/~piaip/pietty/) 或[可攜版](http://jedi.org/PieTTYPortable/)之類的 GUI 程式，可能會在某些進階步驟踩到地雷；非 power user 請勿嘗試）。本課程建議您安裝以下這個「**純命令列**的 ssh 程式」：
+
+ - [Git for the Windows platform](http://git-scm.com/download/win)，不但有 `git.exe`，裡面也含有一枚 `ssh.exe`。
+
+安裝後，記得要去【控制台】把 `ssh.exe` 所在路徑加到 `PATH` 環境變數。
+
+
+### 1.3：磁碟空間
+
+請確定 VirtualBox 之【預設機器資料夾】所在的磁碟上，仍有足夠空間，以容納各虛擬機內容及預載之 Docker 映像檔。
+
+建議至少要預留 15 GB：
+![預留 VirtualBox 虛擬機所需空間](img/vbox-diskspace.png)
 
 
 
@@ -67,7 +88,15 @@
 
 本課程會帶你實機操作，將欲「Docker 化」的程式碼置於 [GitHub](https://github.com/) 上，以供後續 Docker Hub 串接運用。
 
-如果你還沒有 GitHub 帳號，請到[這裡](https://github.com/)註冊，並設定好 SSH key。
+如果你還沒有 GitHub 帳號，請到[這裡](https://github.com/)註冊，並在本機端設定好 SSH key。
+
+GitHub 註冊及設定完畢後，請再進行以下步驟，以訂閱 Docker Workshop 範例程式的異動通知：
+
+A. 開啟 https://github.com/William-Yeh/docker-workshop
+
+B. 按右上角的 ![Watch Button](img/icon-github-watch.png) 按鈕。
+
+之後，範例程式的任何異動，會自動送到你的 GitHub 登入畫面及 email。這個管道也會通知你，最近梯次的範例程式碼，何時正式定案。
 
 
 ## 3. 註冊 Docker Hub 帳號
@@ -82,18 +111,11 @@
 
 有幾份資料，在課堂上會反覆用到。因著作權所限，我們無法主動提供紙本。如果您習慣在紙本上註記，請於參加課程之前自行列印，攜至課堂上。
 
-  - [Docker 命令查詢](http://philipzheng.gitbooks.io/docker_practice/content/appendix_command/README.html)
-
   - [一張圖總結 Docker 的命令](http://philipzheng.gitbooks.io/docker_practice/content/_images/cmd_logic.png) ← 彩色
 
+  - [Docker 命令查詢](http://philipzheng.gitbooks.io/docker_practice/content/appendix_command/README.html)
+
   - [Dockerfile 指令](http://philipzheng.gitbooks.io/docker_practice/content/dockerfile/instructions.html)
-
-
-## 5. 預載範例程式碼
-
-請閱讀文件 ☛  [行前準備：預載範例程式碼](config.md)。
-
-為了節省課程現場下載程式及相關資源的時間及頻寬，請學員先在網路暢通的地方，根據指示備妥必要的軟體及設定。
 
 
 
